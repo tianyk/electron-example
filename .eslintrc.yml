@@ -1,0 +1,44 @@
+env:
+  node: true
+  commonjs: true
+  es6: true
+  mocha: true
+extends: 
+  - 'eslint:recommended'
+  - 'plugin:node/recommended'
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+rules:
+  indent:
+    - error
+    - tab
+    - SwitchCase: 1
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - always
+  no-unused-vars: 
+    - off
+  no-empty:
+    - off
+  camelcase:
+    - error 
+    - properties: always
+  no-var:
+    - error 
+  node/no-deprecated-api:
+    - warn 
+  require-atomic-updates:
+    - warn 
+  no-console: 
+    - error
+  node/no-unpublished-require: 
+    - error
+    - allowModules: 
+      - electron

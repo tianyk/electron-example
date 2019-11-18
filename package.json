@@ -1,0 +1,20 @@
+{
+  "name": "electron-example",
+  "version": "1.0.0",
+  "description": "electron example",
+  "scripts": {
+    "lint": "npx eslint \"**/*.js\" --fix"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "tyk",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "cross-env": "^5.2.1",
+    "cross-var": "^1.1.0",
+    "eslint-plugin-node": "^9.2.0",
+    "husky": "^3.0.9"
+  }
+}
