@@ -7,6 +7,8 @@ const DEFAULT_BROWSER_WINDOW_OPTIONS = {
 	// 初始大小
 	width: 800,
 	height: 600,
+	// 设置程序背景色
+	backgroundColor: '#fff',
 	webPreferences: {
 		// nodejs 上下文 对于在线、或者第三方网页不建议开启，有安全问题 
 		nodeIntegration: true,
@@ -17,6 +19,8 @@ const DEFAULT_BROWSER_WINDOW_OPTIONS = {
 	},
 	// 延迟显示 配合 ready-to-show 使用
 	show: false,
+	// 模态窗口
+	modal: false,
 	// 聚焦 否则启动后默认不是当前程序
 	focusable: true,
 	minWidth: 800,
@@ -55,10 +59,10 @@ const DEFAULT_BROWSER_WINDOW_OPTIONS = {
  */
 function createWindow(url, options = {}) {
 	debug('createWindow %s, %j', url, options);
-	options = _.merge(DEFAULT_BROWSER_WINDOW_OPTIONS, options);
+	options = _.defaultsDeep(options, DEFAULT_BROWSER_WINDOW_OPTIONS);
+	debug('options: %j', options);
 
 	const win = new BrowserWindow(options);
-	debug(url, /^(http|https|file):\/\//.test(url));
 	if (/^(http|https|file):\/\//.test(url)) {
 		win.loadURL(url);
 	} else {
@@ -73,6 +77,7 @@ function createWindow(url, options = {}) {
 	}
 
 	win.on('close', (evt) => {
+		// evt.preventDefault();
 		debug('[close]', url);
 	});
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Hello Electron</title>
+	<link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="container-fluid">
+		<h2>Hello Electron</h2>
+
+		<button id="btn-modal" type="button" class="btn btn-primary">模态框</button>
+	</div>
+
+	<!-- 避免第三方组件使用umd形式 -->
+	<script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+	<script crossorigin="anonymous" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh"
+		src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+	<script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		src="https://lib.baomitu.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script>if (window.module) module = window.module;</script>
+
+	<script>
+		const debug = require('debug')('electron-example:view:index.html');
+		const remote = require('electron').remote;
+		const createWindow = remote.require('./src/create_window');
+
+		$(() => {
+			$('#btn-modal').on('click', function () {
+				const currentWindow = remote.getCurrentWindow;
+
+				const win = createWindow('https://www.baidu.com', {
+					width: 400,
+					height: 300,
+					parent: currentWindow,
+					modal: true,
+					webPreferences: {
+						nodeIntegration: false
+					}
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "demo1",
+  "name": "hello-electron",
   "version": "1.0.0",
   "description": "Hello Electron",
   "main": "main.js",
