@@ -14,7 +14,7 @@
 		body {
 			height: 100%;
 			width: 100%;
-			
+
 			/* devTools 打开时无效 */
 			/* 窗口可拖拽 */
 			-webkit-app-region: drag;
@@ -37,7 +37,14 @@
 	<div class="container-fluid">
 		<h2>Hello Electron</h2>
 
-		<button id="btn-modal" type="button" class="btn btn-primary">模态框</button>
+		<button type="button" class="btn btn-primary">Primary</button>
+		<button type="button" class="btn btn-secondary">Secondary</button>
+		<button type="button" class="btn btn-success">Success</button>
+		<button type="button" class="btn btn-danger">Danger</button>
+		<button type="button" class="btn btn-warning">Warning</button>
+		<button type="button" class="btn btn-info">Info</button>
+		<button type="button" class="btn btn-light">Light</button>
+		<button type="button" class="btn btn-dark">Dark</button>
 	</div>
 
 	<!-- 避免第三方组件使用umd形式 -->
@@ -53,21 +60,7 @@
 		const remote = require('electron').remote;
 		const createWindow = remote.require('./src/create_window');
 
-		$(() => {
-			$('#btn-modal').on('click', function () {
-				const currentWindow = remote.getCurrentWindow;
-
-				const win = createWindow('https://www.baidu.com', {
-					width: 400,
-					height: 300,
-					parent: currentWindow,
-					modal: true,
-					webPreferences: {
-						nodeIntegration: false
-					}
-				});
-			});
-		});
+	
 	</script>
 </body>
 

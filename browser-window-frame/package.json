@@ -1,5 +1,5 @@
 {
-  "name": "browser-window",
+  "name": "browser-window-frame",
   "version": "1.0.0",
   "description": "BrowserWindow",
   "main": "main.js",
