@@ -6,6 +6,9 @@ const { app, session } = require('electron');
 require('./src/ipc');
 const createWindow = require('./src/create_window');
 
+const gotLock = app.requestSingleInstanceLock();
+debug('gotLock', gotLock);
+if (!gotLock) app.quit();
 
 app.on('will-finish-launching', () => {
 	// 当应用程序完成基础的启动的时候被触发。 在 Windows 和 Linux 中, will-finish-launching 事件与 ready 事件是相同的。

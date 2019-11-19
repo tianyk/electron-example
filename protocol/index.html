@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body>
+
+  <div>
+    net
+
+    <img width="100" src="cos://XY9GqUcS5cZG2Tq0jQO8w.png" alt="">
+    <!-- <img width="100" src="https://itextbook-dev-1252350207.cos.ap-beijing.myqcloud.com/XY9GqUcS5cZG2Tq0jQO8w.png" alt=""> -->
+
+    <p>
+      Base64: <span id="status"></span>
+
+      <a href="base64://5Lit5Zu9QWJj">中国ABC</a>
+    </p>
+
+    <script>
+      function xhr(options) {
+        options = {
+          method: 'GET',
+          ...options
+        };
+
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open(options.method, options.url);
+          xhr.send();
+
+          xhr.onload = () => {
+            console.log(xhr)
+            resolve(xhr.responseText || xhr.response);
+          };
+          xhr.onerror = (err) => {
+            reject(err);
+          };
+        });
+
+      }
+
+      xhr({ url: `base64://${Buffer.from('中国Abc').toString('base64')}` })
+        .then(text => {
+          document.getElementById('status').innerText = text;
+        });
+    </script>
+  </div>
+
+</body>
+
+</html>

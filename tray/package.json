@@ -1,0 +1,23 @@
+{
+  "name": "demo2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx electron .",
+    "rebuild": "npx electron-rebuild -f"
+  },
+  "devDependencies": {
+    "electron": "^7.1.0",
+    "electron-builder": "^22.1.0",
+    "electron-rebuild": "^1.8.6"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "electron-notification-state": "^1.0.4",
+    "lodash": "^4.17.15",
+    "once": "^1.4.0"
+  }
+}

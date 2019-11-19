@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body>
+
+  <div>
+    快捷键
+  </div>
+
+  <script>
+    const debug = require('debug')('demo:6:renderer');
+    const { remote, ipcRenderer } = require('electron');
+    const { BrowserView, dialog } = remote;
+
+    function openWebview() {
+      const win = remote.getCurrentWindow();
+
+      const view = new BrowserView()
+      win.setBrowserView(view);
+      view.setBounds({ x: 100, y: 100, width: 300, height: 300 });
+      view.webContents.loadURL('https://www.baidu.com');
+    }
+
+    function tracing() {
+      ipcRenderer.send('tracing');
+    }
+
+    async function select() {
+      const files = await dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] });
+      debug('files, %o', files);
+    }
+
+    async function selectDir() {
+      const dirs = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+      debug('dirs, %o', files);
+    }
+
+    async function saveFile() {
+      const { filePath, canceled } = await dialog.showSaveDialog({
+        title: '保存文件🤡'
+      });
+
+      debug('saveFile', filePath);
+    }
+
+    async function messageBox() {
+      const check = await dialog.showMessageBox({
+        type: 'question',
+        buttons: ['我是一个按钮', '我是也是一个按钮'],
+        title: '我是title',
+        message: '我是message',
+        checkboxLabel: '我同意'
+      });
+      debug('check: %j', check)
+    }
+
+    async function errorBox() {
+      const check = await dialog.showErrorBox('我是标题', '我是内容');
+      debug('check: %j', check)
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hello Electron</title>
+  <link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+
+      /* devTools 打开时无效 */
+      /* 窗口可拖拽 */
+      -webkit-app-region: drag;
+      /* 文本不可选择 */
+      -webkit-user-select: none;
+    }
+
+    button {
+      -webkit-app-region: no-drag;
+    }
+
+    /* .titlebar {
+			-webkit-user-select: none;
+			-webkit-app-region: drag;
+		} */
+  </style>
+</head>
+
+<body style="-webkit-app-region: drag">
+  <div class="container-fluid">
+
+
+    <div class="input-group mb-3">
+      <input id="input-go" type="text" class="form-control" placeholder="https://www.google.com"
+        value="https://www.baidu.com">
+      <div class="input-group-append">
+        <button id="btn-go" class="btn btn-outline-secondary" type="button">Go</button>
+      </div>
+    </div>
+
+    <div class="input-group mb-3">
+      <input id="input-open" type="text" class="form-control" placeholder="https://www.google.com"
+        value="https://www.baidu.com">
+      <div class="input-group-append">
+        <button id="btn-open" class="btn btn-outline-secondary" type="button">Open</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 避免第三方组件使用umd形式 -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script crossorigin="anonymous" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh"
+    src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    src="https://lib.baomitu.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script>if (window.module) module = window.module;</script>
+
+  <script>
+    const debug = require('debug')('electron-example:view:index.html');
+    const remote = require('electron').remote;
+    const createWindow = remote.require('./src/create_window');
+
+    $(() => {
+      $('#btn-go').on('click', () => {
+        const go = $('#input-go').val();
+        if (go) window.location.href = go;
+      });
+
+      $('#btn-open').on('click', () => {
+        const open = $('#input-open').val();
+        if (open) window.open(open, '新网页', 'nodeIntegration=no');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

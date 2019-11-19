@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body>
+  <h1>Hello World!</h1>
+  <p>
+    <span id="time"></span>
+  </p>
+  <div>
+    <video width="320" src=""></video>
+  </div>
+
+  <button onclick="notifyTime()">报时</button>
+
+  <!-- 2160p：3840x2160
+1440p：2560x1440
+1080p：1920x1080
+720p：1280x720
+480p：854x480
+360p：640x360
+240p：426x240 -->
+  <button onclick="recordScreen()">录屏</button>
+  <button onclick="recordWindow('计算器')">捕获应用</button>
+  <button onclick="recordCamera()">捕获摄像头</button>
+
+  <button onclick="stopRecord()">停止录制</button>
+
+
+  <script>
+    const debug = require('debug')('demo:4:render');
+  </script>
+  <script>
+    const time = document.getElementById('time');
+    time.innerText = new Date().toUTCString();
+
+    setInterval(() => {
+      time.innerText = new Date().toUTCString();
+    }, 1000);
+  </script>
+
+  <script>
+    // 通知
+    function notifyTime() {
+      let myNotification = new Notification('时间', {
+        icon: 'image/Fruit-1.png',
+        body: `现在是UTC时间 ${new Date().toUTCString()}`
+      })
+    }
+  </script>
+
+
+  <script>
+    // 在线监测
+    const alertOnlineStatus = () => {
+      new Notification('在线监测', {
+        icon: 'image/QQ20191113-191703@2x.png',
+        body: navigator.onLine ? 'online' : 'offline'
+      })
+    }
+
+    window.addEventListener('online', alertOnlineStatus)
+    window.addEventListener('offline', alertOnlineStatus)
+
+    alertOnlineStatus()
+  </script>
+
+  <script>
+      // 离屏渲染
+      (function () {
+        const fs = require('fs');
+        function toBuffer(ab) {
+          var buf = Buffer.alloc(ab.byteLength);
+          var view = new Uint8Array(ab);
+          for (var i = 0; i < buf.length; ++i) {
+            buf[i] = view[i];
+          }
+          return buf;
+        }
+
+        // 需要配置 offscreen: true 开离屏渲染
+        const { remote } = require('electron');
+        const win = remote.getCurrentWindow();
+        win.webContents.on('paint', (event, dirty, image) => {
+          const bitmap = image.getBitmap();
+          console.log(event, dirty, image)
+          // updateBitmap(dirty, image.getBitmap())
+          // const buffer = toBuffer(image.getBitmap())
+          fs.writeFileSync(Date.now() + '.png', image.toPNG());
+        })
+        win.webContents.frameRate = 30;
+      })()
+  </script>
+
+  <script>
+    // 录屏
+    const { desktopCapturer } = require('electron')
+
+    // 当前正在播放的媒体流
+    let currentStream;
+    // 播放
+    function play(stream) {
+      if (!stream) throw new Error('stream should be MediaStream');
+
+      mediaRecorder = new MediaRecorder({
+        audioBitsPerSecond: 128000,
+        videoBitsPerSecond: 2500000,
+        mimeType: 'video/mp4'
+      });
+
+      mediaRecorder.ondataavailable = handleDataAvailable;
+      mediaRecorder.start();
+
+      function handleDataAvailable(evt) {
+        console.log("data-available");
+        if (evt.data.size > 0) {
+          recordedChunks.push(evt.data);
+          console.log(recordedChunks);
+          download();
+        } else {
+          // ...
+        }
+      }
+
+      currentStream = stream;
+      // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream
+      debug('play', stream.id);
+      const video = document.querySelector('video')
+      video.srcObject = stream;
+      video.onloadedmetadata = (evt) => video.play();
+    }
+
+    // 停止录制
+    function stopRecord() {
+      // https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack
+      if (!currentStream) return;
+      currentStream.getTracks().forEach((track) => track.stop());
+      currentStream = null;
+    }
+
+    async function record(source, options = {}) {
+      if (!source) throw new Error('require source');
+      debug('record', source);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          mandatory: {
+            // 要从整个桌面同时捕获音频和视频 chromeMediaSource: 'desktop'
+            chromeMediaSource: 'desktop',
+            chromeMediaSourceId: source.id,
+            // minWidth: 1280,
+            // minHeight: 720,
+            // maxWidth: 1280,
+            // maxHeight: 720,
+            maxWidth: window.screen.width,
+            maxHeight: window.screen.height
+          }
+        }
+      });
+      debug('stream: %s', stream.id);
+
+      play(stream);
+    }
+
+    // 录制桌面
+    async function recordScreen() {
+      debug('recordScreen');
+      const sources = await desktopCapturer.getSources({ types: ['screen'] });
+      debug('sources: %j', sources);
+
+      await record(sources[0]);
+    }
+
+    // 录制窗口应用
+    async function recordWindow(app) {
+      debug('record');
+      const sources = await desktopCapturer.getSources({ types: ['window'] });
+      debug('sources: %O', sources);
+
+      for (const source of sources) {
+        if (source.name === app) {
+          await record(source);
+          break;
+        }
+      }
+    }
+
+
+    // 录制摄像头
+    async function recordCamera() {
+      // https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia
+      const stream = await navigator.mediaDevices.getUserMedia({
+        // audio: false,
+        // audio: true,
+        // OverConstrainedError 
+        // 浏览器会试着满足这个请求参数，但是如果无法准确满足此请求中参数要求或者用户选择覆盖了请求中的参数时，有可能返回其它的分辨率。
+        // 如果强制获取，浏览器不满足时会抛出 OverConstrainedError 异常
+        // frameRate 设置帧率
+        video: { width: 426, height: 240, frameRate: { ideal: 10, max: 15 } }
+        // video: { width: 640, height: 360 }
+      });
+
+      play(stream);
+    }
+
+  </script>
+
+  <script>
+    const { remote } = require('electron');
+    const win = remote.getCurrentWindow();
+    let process = 0.1;
+
+    const timer = setInterval(() => {
+      if (process > 1) process = 1;
+      win.setProgressBar(process);
+
+      if (process === 1) {
+        clearInterval(timer);
+        // 设置为0一下清理进度条
+        win.setProgressBar(-1);
+      }
+
+      process += 0.1;
+    }, 200)
+  </script>
+
+  <script>
+    window.onbeforeunload = (evt) => {
+      console.log('I do not want to be closed');
+      // returnValue 返回非 `undefined` 将不会关闭窗口
+      // evt.returnValue = false;
+    }
+  </script>
+</body>
+
+</html>
