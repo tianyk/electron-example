@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Dialog</title>
+  <link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+
+      /* devTools 打开时无效 */
+      /* 窗口可拖拽 */
+      -webkit-app-region: drag;
+      /* 文本不可选择 */
+      -webkit-user-select: none;
+    }
+
+    button {
+      -webkit-app-region: no-drag;
+    }
+
+    /* .titlebar {
+			-webkit-user-select: none;
+			-webkit-app-region: drag;
+		} */
+  </style>
+</head>
+
+<body style="-webkit-app-region: drag">
+  <div class="container-fluid">
+    <button id="btn-select-file" type="button" class="btn btn-primary">选择一些文件</button>
+    <button id="btn-select-dir" type="button" class="btn btn-secondary">选择一个文件夹</button>
+    <button id="btn-save-file" type="button" class="btn btn-success">保存一个文件</button>
+    <button id="btn-message-box" type="button" class="btn btn-danger">messageBox</button>
+    <button id="btn-error-box" type="button" class="btn btn-warning">errorBox</button>
+  </div>
+
+  <!-- 避免第三方组件使用umd形式 -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script crossorigin="anonymous" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh"
+    src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    src="https://lib.baomitu.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script>if (window.module) module = window.module;</script>
+
+  <script>
+    const debug = require('debug')('electron-example:view:index.html');
+    const { dialog, app } = require('electron').remote;
+    const downloadDir = app.getPath('downloads')
+
+    $(() => {
+      // 选择文件
+      $('#btn-select-file').on('click', async () => {
+        const files = await dialog.showOpenDialog({ defaultPath: downloadDir, properties: ['openFile', 'multiSelections'] });
+        debug('select files: %o', files);
+      });
+
+      // 选择文件夹
+      $('#btn-select-dir').on('click', async () => {
+        const { filePaths, canceled } = await dialog.showOpenDialog({
+          defaultPath: downloadDir,
+          properties: ['openDirectory']
+        });
+
+        debug('select dir: %o', filePaths);
+      });
+
+      // 保存文件
+      $('#btn-save-file').on('click', async () => {
+        const { filePath, canceled } = await dialog.showSaveDialog({
+          defaultPath: downloadDir,
+          title: '保存文件🤡'
+        });
+
+        debug('saveFile', filePath);
+      });
+
+      // 消息框
+      $('#btn-message-box').on('click', async () => {
+        const check = await dialog.showMessageBox({
+          type: 'question',
+          buttons: ['我是一个按钮', '我是也是一个按钮'],
+          title: '我是title',
+          message: '我是message',
+          checkboxLabel: '我同意'
+        });
+        debug('messageBox: %j', check);
+      });
+
+      // 错误提示框
+      $('#btn-error-box').on('click', async () => {
+        debug('errorBox');
+        await dialog.showErrorBox('系统错误', 'error stack');
+      });
+    });
+  </script>
+</body>
+
+</html>
