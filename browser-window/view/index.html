@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Hello Electron</title>
+	<title>Electron BrowserWindow</title>
 	<link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 		href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 
@@ -37,14 +37,14 @@
 	<div class="container-fluid">
 		<h2>Hello Electron</h2>
 
-		<button type="button" class="btn btn-primary">Primary</button>
-		<button type="button" class="btn btn-secondary">Secondary</button>
-		<button type="button" class="btn btn-success">Success</button>
-		<button type="button" class="btn btn-danger">Danger</button>
-		<button type="button" class="btn btn-warning">Warning</button>
-		<button type="button" class="btn btn-info">Info</button>
-		<button type="button" class="btn btn-light">Light</button>
-		<button type="button" class="btn btn-dark">Dark</button>
+		<button id="btn-reload" type="button" class="btn btn-primary">重新加载</button>
+		<button id="btn-close" type="button" class="btn btn-secondary">关闭</button>
+		<button id="btn-progress" type="button" class="btn btn-success">模拟进度</button>
+		<!-- <button type="button" class="btn btn-danger">Danger</button> -->
+		<!-- <button type="button" class="btn btn-warning">Warning</button> -->
+		<button id="btn-capture" type="button" class="btn btn-info">截图</button>
+		<!-- <button type="button" class="btn btn-light">Light</button> -->
+		<!-- <button type="button" class="btn btn-dark">Dark</button> -->
 	</div>
 
 	<!-- 避免第三方组件使用umd形式 -->
@@ -57,10 +57,52 @@
 
 	<script>
 		const debug = require('debug')('electron-example:view:index.html');
+		const fs = require('fs');
+		const path = require('path');
+		// 不建议滥用 remote 
 		const remote = require('electron').remote;
-		const createWindow = remote.require('./src/create_window');
+		const downloadPath = remote.app.getPath('downloads');
+		const currentWindow = remote.getCurrentWindow();
 
-	
+		$(() => {
+			// 截图
+			$('#btn-capture').on('click', () => {
+				const filepath = path.join(downloadPath, 'electron-capture.png');
+				debug('capture', filepath);
+
+				currentWindow.capturePage()
+					.then((img) => {
+						fs.writeFileSync(filepath, img.toPNG());
+					});
+			});
+
+			// 重新加载
+			$('#btn-reload').on('click', () => {
+				currentWindow.reload();
+			});
+
+			// 关闭
+			$('#btn-close').on('click', () => {
+				currentWindow.close();
+			});
+
+			// 模拟进度
+			$('#btn-progress').on('click', () => {
+				let progress = 0;
+				const timer = setInterval(() => {
+					progress += 0.1;
+					currentWindow.setProgressBar(progress);
+
+					if (progress >= 1) {
+						// 进度不会自动消失 <0 时进度条消失
+						currentWindow.setProgressBar(-1);
+						clearInterval(timer);
+					}
+				}, 100);
+			});
+
+			
+		});
 	</script>
 </body>
 
