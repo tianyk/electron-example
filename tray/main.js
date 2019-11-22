@@ -61,7 +61,7 @@ function createWindow(url, options = {}) {
 	options = _.merge(DEFAULT_BROWSER_WINDOW_OPTIONS, options);
 
 	const win = new BrowserWindow(options);
-	debug(url, /^(http|https|file):\/\//.test(url))
+	debug(url, /^(http|https|file):\/\//.test(url));
 	if (/^(http|https|file):\/\//.test(url)) {
 		win.loadURL(url);
 	} else {
@@ -81,11 +81,11 @@ function createWindow(url, options = {}) {
 	win.on('close', (evt) => {
 		// preventDefault 将阻止关闭
 		// evt.preventDefault();
-	})
+	});
 
 	win.on('closed', () => {
 		debug('[closed]', url);
-	})
+	});
 	return win;
 }
 
@@ -120,20 +120,20 @@ app.on('ready', async () => {
 	debug('ready');
 	debug('local', app.getLocale());
 
-	const win1 = createWindow(`index.html`, {
+	const win1 = createWindow('index.html', {
 		webPreferences: {
 			partition: 'persist:roombox:win1'
 		}
 	});
 
-	let appIcon = new Tray('./image/Atom@16.png')
+	let appIcon = new Tray('./image/Atom@16.png');
 	const contextMenu = Menu.buildFromTemplate([
 		{ label: 'Item1', type: 'radio' },
 		{ label: 'Item2', type: 'radio' }
-	])
+	]);
 
 	// Make a change to the context menu
-	contextMenu.items[1].checked = false
+	contextMenu.items[1].checked = false;
 
 	// Call this again for Linux because we modified the context menu
 	appIcon.setContextMenu(contextMenu);

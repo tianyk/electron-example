@@ -58,7 +58,7 @@ function createWindow(url, options = {}) {
 
 	debug('options: %j', options);
 	const win = new BrowserWindow(options);
-	debug(url, /^(http|https|file):\/\//.test(url))
+	debug(url, /^(http|https|file):\/\//.test(url));
 	if (/^(http|https|file):\/\//.test(url)) {
 		win.loadURL(url);
 	} else {
@@ -77,11 +77,11 @@ function createWindow(url, options = {}) {
 	win.on('close', (evt) => {
 		// preventDefault 将阻止关闭
 		// evt.preventDefault();
-	})
+	});
 
 	win.on('closed', () => {
 		debug('[closed]', url);
-	})
+	});
 	return win;
 }
 
@@ -92,21 +92,21 @@ app.on('window-all-closed', () => {
 
 app.on('quit', () => {
 	debug('quit');
-})
+});
 
 app.on('ready', () => {
 	debug('ready');
 	debug('local', app.getLocale());
-	const mainWindow = createWindow(`index.html`);
+	const mainWindow = createWindow('index.html');
 
 	let shortcutRegisterResult = globalShortcut.isRegistered('CommandOrControl+Shift+T');
 	debug('before register 快捷键注册', shortcutRegisterResult);
 	// 注册一个 'CommandOrControl+X' 的全局快捷键
 	shortcutRegisterResult = globalShortcut.register('CommandOrControl+Shift+T', () => {
-		debug('触发快捷键')
+		debug('触发快捷键');
 		const notify = new Notification({
 			title: '快捷键',
-			body: `触发了快捷键`
+			body: '触发了快捷键'
 		});
 		// 不同于浏览器的 Notification ，需要手动调用 show 才会显示
 		notify.show();

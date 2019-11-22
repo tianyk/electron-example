@@ -66,7 +66,7 @@ function createWindow(url, options = {}) {
 
 	debug('options: %j', options);
 	const win = new BrowserWindow(options);
-	debug(url, /^(http|https|file):\/\//.test(url))
+	debug(url, /^(http|https|file):\/\//.test(url));
 	if (/^(http|https|file):\/\//.test(url)) {
 		win.loadURL(url);
 	} else {
@@ -85,18 +85,18 @@ function createWindow(url, options = {}) {
 	win.on('close', (evt) => {
 		// preventDefault 将阻止关闭
 		// evt.preventDefault();
-	})
+	});
 
 	win.on('closed', () => {
 		debug('[closed]', url);
-	})
+	});
 	return win;
 }
 
 const dockMenu = Menu.buildFromTemplate([
 	{
 		label: 'New Window',
-		click() { console.log('New Window') }
+		click() { console.log('New Window'); }
 	}, {
 		label: 'New Window with Settings',
 		submenu: [
@@ -116,9 +116,9 @@ app.on('window-all-closed', () => {
 
 app.on('quit', () => {
 	debug('quit');
-})
+});
 
 app.on('ready', () => {
 	debug('ready');
-	const mainWindow = createWindow(`index.html`);
+	const mainWindow = createWindow('index.html');
 });

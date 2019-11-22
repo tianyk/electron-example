@@ -61,7 +61,7 @@ function createWindow(url, options = {}) {
 	options = _.merge(DEFAULT_BROWSER_WINDOW_OPTIONS, options);
 
 	const win = new BrowserWindow(options);
-	debug(url, /^(http|https|file):\/\//.test(url))
+	debug(url, /^(http|https|file):\/\//.test(url));
 	if (/^(http|https|file):\/\//.test(url)) {
 		win.loadURL(url);
 	} else {
@@ -81,11 +81,11 @@ function createWindow(url, options = {}) {
 	win.on('close', (evt) => {
 		// preventDefault 将阻止关闭
 		// evt.preventDefault();
-	})
+	});
 
 	win.on('closed', () => {
 		debug('[closed]', url);
-	})
+	});
 	return win;
 }
 
@@ -154,14 +154,14 @@ app.on('ready', async () => {
 	debug('[after] win1Cookies: %j, win2Cookies: %j', win1Cookies, win2Cookies);
 	
 
-	const win1 = createWindow(`https://www.baidu.com`, {
+	const win1 = createWindow('https://www.baidu.com', {
 		webPreferences: {
 			// session: win1Session,
 			partition: 'persist:roombox:win1'
 		}
 	});
 
-	const win2 = createWindow(`https://www.baidu.com`, {
+	const win2 = createWindow('https://www.baidu.com', {
 		webPreferences: {
 			// session: win2Session,
 			partition: 'persist:roombox:win2'

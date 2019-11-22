@@ -53,6 +53,34 @@
       </div>
     </div>
 
+    <form>
+      <div class="form-group">
+        <textarea id="textarea-execute-javascript" class="form-control" rows="3">
+        console.log('x');
+        </textarea>
+      </div>
+      <button id="btn-execute-javascript" type="button" class="btn btn-primary">执行脚本</button>
+    </form>
+
+
+    <form style="margin-top: 20px;">
+      <div class="form-group">
+        <textarea id="textarea-insert-css" class="form-control" rows="3">
+          #btn-insert-css {
+            display:none;
+          }
+        </textarea>
+      </div>
+      <button id="btn-insert-css" type="button" class="btn btn-primary">设置样式</button>
+    </form>
+
+    <div style="margin-top: 20px;">
+      <button data-electron-ipc="electron:m1" type="button" class="btn btn-primary">发送消息m1</button>
+      <button data-electron-ipc="electron:m2" type="button" class="btn btn-secondary">发送消息m2</button>
+      <button data-electron-ipc="electron:m3" type="button" class="btn btn-success">发送消息m3</button>
+      <button data-electron-ipc="electron:m4" type="button" class="btn btn-danger">发送消息m4</button>
+    </div>
+
   </div>
 
   <!-- 避免第三方组件使用umd形式 -->
@@ -65,8 +93,9 @@
 
   <script>
     const debug = require('debug')('electron-example:view:index.html');
-    const remote = require('electron').remote;
+    const { remote, ipcRenderer } = require('electron');
     const createWindow = remote.require('./src/create_window');
+    const currentWebContents = remote.getCurrentWebContents();
 
     $(() => {
       $('#btn-go').on('click', () => {
@@ -76,8 +105,27 @@
 
       $('#btn-open').on('click', () => {
         const open = $('#input-open').val();
-        if (open) window.open(open, '新网页', 'nodeIntegration=no');
+        if (open) window.open(open, '新网页', 'nodeIntegration=no;');
       });
+
+      $('#btn-execute-javascript').on('click', () => {
+        const code = $('#textarea-execute-javascript').val();
+        debug('code', code);
+        if (code) currentWebContents.executeJavaScript(code).then(debug).catch(console.error);
+      });
+
+
+      $('#btn-insert-css').on('click', () => {
+        const css = $('#textarea-insert-css').val();
+        debug('css', css);
+        if (css) currentWebContents.insertCSS(css).then(debug).catch(console.error);
+      });
+
+      $('[data-electron-ipc^="electron:"]').each((_, el) => {
+				$(el).on('click', function (evt) {
+					ipcRenderer.send($(this).data('electron-ipc'));
+				});
+			})
     });
   </script>
 
