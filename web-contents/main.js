@@ -1,5 +1,4 @@
 const debug = require('debug')('electron-example:main');
-const minimatch = require('minimatch');
 const { app } = require('electron');
 
 const domainWhiteList = require('./src/domain_white_list');
@@ -33,6 +32,10 @@ app.on('ready', async () => {
 	mainWin.webContents.on('will-navigate', (evt, url) => {
 		debug('[will-navigate]', url);
 		if (!domainWhiteList.match(url)) evt.preventDefault();
+	});
+
+	mainWin.webContents.on('paint', () => {
+
 	});
 
 	// 打开新窗口事件
