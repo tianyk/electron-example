@@ -5,6 +5,13 @@ const createWindow = require('./src/create_window');
 
 app.on('ready', async () => {
 	debug('ready');
-	const win1 = createWindow('view/index.html');
-	const win2 = createWindow('view/index.html');
+	const exampleSession = session.fromPartition('persist:electron-example:session');
+	const win1 = createWindow('https://assets.coursebox.xdf.cn/q0KyZDfCcuePCVpSi0rIR.html');
+
+	const win2 = createWindow('https://assets.coursebox.xdf.cn/q0KyZDfCcuePCVpSi0rIR.html', {
+		webPreferences: {
+			session: exampleSession,
+			// partition: 'persist:electron-example:session1'
+		}
+	});
 });

@@ -30,12 +30,13 @@
 
 <body style="-webkit-app-region: drag">
   <div class="container-fluid">
-    <form class="form-inline">
-      <div class="form-group mb-2">
-        <label for="win-name" class="sr-only">Email</label>
-        <input type="text" class="form-control-plaintext" id="win-name" value="">
+    <form class="form-inline" style="width: 300px; margin: 30px auto;">
+      <div class="form-group">
+        <label for="win-name" class="sr-only">窗口名</label>
+        <input type="text" class="form-control" id="win-name" value="">
       </div>
-      <button type="button" id="btn-save-cookie" class="btn btn-primary mb-2">保存</button>
+
+      <button type="button" style="margin-left: 10px;" id="btn-save-cookie" class="btn btn-primary">设置</button>
     </form>
   </div>
 
@@ -51,13 +52,17 @@
   <script>if (window.module) module = window.module;</script>
 
   <script>
-    // const debug = require('debug')('electron-example:view:index.html');
+    const debug = require('debug')('electron-example:view:index.html');
 
     $(() => {
+      const COOKIE_NAME = 'win-name';
+      const winName = cookie.get(COOKIE_NAME);
+      if (winName) $('#win-name').val(winName);
+
       $('#btn-save-cookie').on('click', () => {
-        const name = $('#win-name').val();
-        // debug('name: %s', name);
-        if (name) cookie.set('win-name', name, { expires: 7 });
+        const winName = $('#win-name').val();
+        debug('name: %s', winName);
+        if (winName) cookie.set(COOKIE_NAME, winName, { expires: 7 });
       });
     });
   </script>

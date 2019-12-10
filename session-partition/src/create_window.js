@@ -68,7 +68,7 @@ function createWindow(url, options = {}) {
 	} else {
 		win.loadFile(url);
 	}
-	if (options.webPreferences && options.webPreferences.devTools) win.webContents.openDevTools();
+	if (options.webPreferences && options.webPreferences.devTools) win.webContents.openDevTools({ mode: 'bottom' });
 
 	if (!options.show) {
 		win.once('ready-to-show', () => {
