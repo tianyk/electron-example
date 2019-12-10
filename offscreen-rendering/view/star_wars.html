@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hello Electron</title>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+
+      /* devTools 打开时无效 */
+      /* 窗口可拖拽 */
+      -webkit-app-region: drag;
+      /* 文本不可选择 */
+      -webkit-user-select: none;
+    }
+
+    button {
+      -webkit-app-region: no-drag;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .fade {
+      position: relative;
+      width: 100%;
+      min-height: 60vh;
+      top: -25px;
+      background-image: linear-gradient(0deg, transparent, black 75%);
+      z-index: 1;
+    }
+
+    .star-wars {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      height: 800px;
+      color: #feda4a;
+      font-family: 'Pathway Gothic One', sans-serif;
+      font-size: 500%;
+      font-weight: 600;
+      letter-spacing: 6px;
+      line-height: 150%;
+      perspective: 400px;
+      text-align: justify;
+    }
+
+    .crawl {
+      position: relative;
+      top: 9999px;
+      transform-origin: 50% 100%;
+      animation: crawl 60s linear;
+    }
+
+    .crawl>.title {
+      font-size: 90%;
+      text-align: center;
+    }
+
+    .crawl>.title h1 {
+      margin: 0 0 100px;
+      text-transform: uppercase;
+    }
+
+    @keyframes crawl {
+      0% {
+        top: 0;
+        transform: rotateX(20deg) translateZ(0);
+      }
+
+      100% {
+        top: -6000px;
+        transform: rotateX(25deg) translateZ(-2500px);
+      }
+    }
+  </style>
+</head>
+
+<body style="-webkit-app-region: drag;">
+
+  <div class="fade"></div>
+
+  <section class="star-wars">
+
+    <div class="crawl">
+
+      <div class="title">
+        <p>Episode IV</p>
+        <h1>A New Hope</h1>
+      </div>
+
+      <p>It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory
+        against the evil Galactic Empire.</p>
+      <p>During the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate weapon, the DEATH STAR,
+        an armored space station with enough power to destroy an entire planet.</p>
+      <p>Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen
+        plans that can save her people and restore freedom to the galaxy…</p>
+
+    </div>
+
+  </section>
+
+
+  <!-- 避免第三方组件使用umd形式 -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script>if (window.module) module = window.module;</script>
+
+  <script>
+    const debug = require('debug')('electron-example:view:snow.html');
+  </script>
+
+</body>
+
+</html>

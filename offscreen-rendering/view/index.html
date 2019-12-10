@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Offscreen Rendering</title>
+</head>
+<style>
+	html, body {
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+</style>
+<body>
+
+	<script>
+		 const debug = require('debug')('electron-example:view:index.html');
+		const { ipcRenderer } = require('electron');
+		ipcRenderer.on('background-image-update', (evt, img) => {
+			document.body.style.backgroundImage = `url('${img}')`;
+			document.body.style.backgroundPosition = 'center';
+		});
+	</script>
+</body>
+</html>
