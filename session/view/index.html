@@ -30,14 +30,13 @@
 
 <body style="-webkit-app-region: drag">
   <div class="container-fluid">
-    <form class="form-inline" style="width: 300px; margin: 30px auto;">
-      <div class="form-group">
-        <label for="win-name" class="sr-only">窗口名</label>
-        <input type="text" class="form-control" id="win-name" value="">
-      </div>
+    <span>服务状态: </span> <span id="coursebox-service-status"></span>
 
-      <button type="button" style="margin-left: 10px;" id="btn-save-cookie" class="btn btn-primary">设置</button>
-    </form>
+    <div style="margin-top: 10px;">
+      <img src="https://assets.coursebox.xdf.cn/4rK20f8Fs-A_dmQ2N577O.png" width="50" alt="atom">
+      <img src="https://assets.coursebox.xdf.cn/404" alt="404">
+      <img src="https://404.coursebox.xdf.cn/404" alt="404">
+    </div>
   </div>
 
 
@@ -55,14 +54,8 @@
     const debug = require('debug')('electron-example:view:index.html');
 
     $(() => {
-      const COOKIE_NAME = 'win-name';
-      const winName = cookie.get(COOKIE_NAME);
-      if (winName) $('#win-name').val(winName);
-
-      $('#btn-save-cookie').on('click', () => {
-        const winName = $('#win-name').val();
-        debug('name: %s', winName);
-        if (winName) cookie.set(COOKIE_NAME, winName, { expires: 7 });
+      $.get('https://coursebox.xdf.cn/_heartbeat').done(data => {
+        $('#coursebox-service-status').text(data);
       });
     });
   </script>
