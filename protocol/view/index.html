@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hello Electron</title>
+  <link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+
+      /* devTools 打开时无效 */
+      /* 窗口可拖拽 */
+      -webkit-app-region: drag;
+      /* 文本不可选择 */
+      -webkit-user-select: none;
+    }
+
+    button {
+      -webkit-app-region: no-drag;
+    }
+  </style>
+</head>
+
+<body style="-webkit-app-region: drag">
+  <div class="container-fluid">
+    <img width="50" src="cos://4rK20f8Fs-A_dmQ2N577O.png" alt="">
+    <!-- <img width="50" src="https://assets.coursebox.xdf.cn/4rK20f8Fs-A_dmQ2N577O.png" alt="atom"> -->
+
+    Base64: <span id="base64-decode"></span>
+    <a href="base64://5Lit5Zu9QWJj">中国ABC</a>
+  </div>
+
+
+  <!-- 避免第三方组件使用umd形式 -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script crossorigin="anonymous" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh"
+    src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    src="https://lib.baomitu.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-U/k9biAb3VvNi9les9TAPU89bbBwTkADT01l9Tfh4iPleOTS6y+cglspx1/ZutIG"
+    src="https://lib.baomitu.com/cookie.js/1.2.3/cookie.min.js"></script>
+  <script>if (window.module) module = window.module;</script>
+
+  <script>
+    $.get(`base64://${Buffer.from('中国Abc').toString('base64')}`)
+      .done(text => $('#base64-decode').text(text));
+  </script>
+
+</body>
+
+</html>

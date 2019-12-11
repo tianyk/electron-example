@@ -1,5 +1,5 @@
 {
-  "name": "protocol",
+  "name": "web-contents",
   "version": "1.0.0",
   "description": "webContents",
   "main": "main.js",

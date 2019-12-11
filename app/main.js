@@ -105,7 +105,7 @@ if (!gotTheLock) app.exit();
 app.on('ready', () => {
 	// 当 Electron 完成初始化时被触发。 app.isReady() 可以检测是否`ready`
 	debug('[ready]');
-	const win = createWindow('view/index.html');
+	const win = createWindow('view/index.html', { show: true });
 	session.fromPartition('persist:electron-example');
 });
 
