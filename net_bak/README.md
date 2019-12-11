@@ -1,4 +1,4 @@
-### net/netLog
+### net & netLog
 
 netlog_viewer
 https://www.chromium.org/for-testers/providing-network-details
