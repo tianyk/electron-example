@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Hello Electron</title>
+	<link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			/* 撑满全屏 */
+			height: 100%;
+
+			/* devTools 打开时无效 */
+			/* 窗口可拖拽 */
+			-webkit-app-region: drag;
+			/* 文本不可选择 */
+			-webkit-user-select: none;
+		}
+
+		button {
+			-webkit-app-region: no-drag;
+		}
+
+		.container {
+			/* 撑满全屏 */
+			height: 100%;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h2>CPU信息</h2>
+		<pre id="cpus">
+
+
+		</pre>
+	</div>
+
+	<script>
+		if (typeof getCPUs === 'function') {
+			document.getElementById('cpus').innerText = JSON.stringify(getCPUs(), null, 4);
+		}
+	</script>
+</body>
+
+</html>
