@@ -25,16 +25,31 @@
     button {
       -webkit-app-region: no-drag;
     }
+
+    .register-protocol {
+      margin-bottom: 10px;;
+    }
   </style>
 </head>
 
 <body style="-webkit-app-region: drag">
   <div class="container-fluid">
-    <img width="50" src="cos://4rK20f8Fs-A_dmQ2N577O.png" alt="">
-    <!-- <img width="50" src="https://assets.coursebox.xdf.cn/4rK20f8Fs-A_dmQ2N577O.png" alt="atom"> -->
+    <div class="register-protocol">
+      <h4>registerHttpProtocol</h4>
+      <img width="50" src="cos://4rK20f8Fs-A_dmQ2N577O.png" alt="">
+      <!-- <img width="50" src="https://assets.coursebox.xdf.cn/4rK20f8Fs-A_dmQ2N577O.png" alt="atom"> -->
+    </div>
 
-    Base64: <span id="base64-decode"></span>
-    <a href="base64://5Lit5Zu9QWJj">中国ABC</a>
+    <div class="register-protocol">
+      <h4>registerStringProtocol</h4>
+      Base64: <span id="base64-decode"></span>
+      <a href="base64://5Lit5Zu9QWJj">中国ABC</a>
+    </div>
+
+    <div class="register-protocol">
+      <h4>registerFileProtocol</h4>
+      <img width="50" src="assets://images/atom.png" alt="atom">
+    </div>
   </div>
 
 

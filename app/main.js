@@ -60,6 +60,9 @@ app.on('session-created', (session) => {
 	debug('[session-created]', session);
 });
 
+process.on('uncaughtException', (err) => {
+	debug('[uncaughtException]', err);
+});
 
 // 各种路径
 debug('app.name: %s appPath: %s', app.name, app.getAppPath());

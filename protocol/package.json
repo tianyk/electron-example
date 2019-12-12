@@ -12,6 +12,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "lodash": "^4.17.15",
+    "mime-types": "^2.1.25",
     "ms": "^2.1.2"
   },
   "devDependencies": {
