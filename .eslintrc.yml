@@ -2,6 +2,7 @@ env:
   node: true
   commonjs: true
   es6: true
+  browser: true
   mocha: true
 extends: 
   - 'eslint:recommended'
@@ -39,6 +40,10 @@ rules:
   no-console: 
     - error
   node/no-unpublished-require: 
+    - error
+    - allowModules: 
+      - electron
+  node/no-missing-require:
     - error
     - allowModules: 
       - electron

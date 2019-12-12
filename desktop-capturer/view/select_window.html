@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>选择媒体流</title>
+  <link crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    href="https://lib.baomitu.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+
+      /* devTools 打开时无效 */
+      /* 窗口可拖拽 */
+      -webkit-app-region: drag;
+      /* 文本不可选择 */
+      -webkit-user-select: none;
+    }
+
+    button {
+      -webkit-app-region: no-drag;
+    }
+
+    .video-container {
+      width: 300px;
+      height: 150px;
+      display: block;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .operate-groups {
+      margin: 10px;
+    }
+
+    .capturer-list-container {
+      margin-top: 10px;
+    }
+
+    .capturer-list-container ul {
+      padding: 0;
+      margin: auto;
+      width: 510px;
+    }
+
+    .capturer-list-container li {
+      width: 150px;
+      list-style-type: none;
+      display: inline-block;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .capturer-list-container li a {
+      display: block;
+      width: 150px;
+    }
+  </style>
+</head>
+
+<body style="-webkit-app-region: drag">
+  <div class="container-fluid">
+    <div class="capturer-list-container">
+      <ul class="capturer-list"></ul>
+    </div>
+  </div>
+
+  <!-- 避免第三方组件使用umd形式 -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script crossorigin="anonymous" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh"
+    src="https://lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    src="https://lib.baomitu.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-U/k9biAb3VvNi9les9TAPU89bbBwTkADT01l9Tfh4iPleOTS6y+cglspx1/ZutIG"
+    src="https://lib.baomitu.com/cookie.js/1.2.3/cookie.min.js"></script>
+  <script>if (window.module) module = window.module;</script>
+
+  <script>
+    const debug = require('debug')('electron-example:view:select_window');
+    const { ipcRenderer, desktopCapturer } = require('electron');
+
+    ipcRenderer.on('get-sources', async (evt, options) => {
+      debug('[get-sources]', options);
+      const sources = await desktopCapturer.getSources(options);
+      debug('sources: %O', sources);
+
+      const sourcesList = $('.capturer-list');
+      for (const source of sources) {
+        const thumb = source.thumbnail.toDataURL();
+        if (!thumb) continue;
+        const title = source.name.slice(0, 20);
+        const item = `<li><a data-source-id="${source.id}" href="#"><img src="${thumb}"><span>${title}</span></a></li>`;
+        sourcesList.append(item);
+      }
+
+      $('.capturer-list a').each((_, el) => {
+        $(el).on('click', function (evt) {
+          evt.preventDefault();
+          ipcRenderer.send('source-id-selected', $(this).data('source-id'));
+          sourcesList.html('');
+        });
+      })
+    })
+  </script>
+
+</body>
+
+</html>
