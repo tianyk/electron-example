@@ -1,0 +1,44 @@
+{
+  "name": "build-app",
+  "version": "1.0.0",
+  "description": "Hello Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx electron .",
+    "rebuild": "npx electron-rebuild -f",
+    "pack": "npx electron-builder --dir",
+    "dist": "npx electron-builder"
+  },
+  "author": "tyk",
+  "license": "ISC",
+  "build": {
+    "appId": "your.id",
+    "productName": "测试程序",
+    "mac": {
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "electron": "7.1.0",
+    "electron-builder": "^21.2.0",
+    "electron-rebuild": "^1.8.6"
+  }
+}

@@ -63,4 +63,5 @@ public/sharp-libvips/
 eslint/
 .git-rewrite/
 build/
+dist/
 node_modules/
